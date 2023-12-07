@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Smoke Click</title>
+  <!--  css reset-->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      --sidebar-width: 150px;
+    }
+
+    .button {
+      border-radius: 12px;
+      transition: all 0.1s ease-in-out;
+      width: 100px;
+      height: 50px;
+      white-space: nowrap;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background: #848383;
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+    }
+
+    .button:active {
+      transform: scale(0.9);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100%;
+      background-color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .button__cancel {
+      margin-bottom: 20px;
+    }
+
+    .button__bigRed {
+      padding: 20px;
+      width: 300px;
+      height: 100px;
+      border-radius: 24px;
+      background-color: red;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.1s ease-in-out;
+      margin-left: var(--sidebar-width);
+    }
+  </style>
+  <script type="text/javascript">
+      /**
+       *    type Record = {
+       *      timestamp: number,
+       *      type?: 'cigarette' | 'weed' | 'vape' | 'gum','
+       *    }
+       *
+       * */
+      const localStorageKey = 'smoke-click';
+
+      if (!localStorage.getItem(localStorageKey)) {
+          localStorage.setItem(localStorageKey, JSON.stringify([]));
+      }
+
+      const counter = {
+          list: JSON.parse(localStorage.getItem(localStorageKey)),
+          render() {
+              localStorage.setItem(localStorageKey, JSON.stringify(this.list));
+              document.querySelector('.counter').innerText = this.list.length;
+          },
+          increment() {
+              this.list.push({
+                  timestamp: Date.now(),
+                  type: 'cigarette',
+              });
+              this.render();
+          },
+          undo() {
+              this.list.pop();
+              this.render();
+          },
+          export() {
+              const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.list));
+              const downloadAnchorNode = document.createElement('a');
+              downloadAnchorNode.setAttribute("href", dataStr);
+              downloadAnchorNode.setAttribute("download", "smoke-click.json");
+              document.body.appendChild(downloadAnchorNode); // required for firefox
+              downloadAnchorNode.click();
+              downloadAnchorNode.remove();
+          }
+      }
+  </script>
+</head>
+<body>
+<div class="sidebar">
+  <button onclick="counter.undo()" class="button button__cancel">undo</button>
+  <button onclick="counter.export()" class="button button__download">JSON</button>
+</div>
+<button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span> times
+</button>
+<script type="text/javascript">
+    counter.render();
+</script>
+</body>
+</html>
