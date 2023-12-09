@@ -166,6 +166,10 @@
           render() {
               localStorage.setItem(localStorageKey, JSON.stringify(this.list));
               document.querySelector('.counter').innerText = this.list.length;
+
+              const timesToday = this.countToday();
+              document.getElementById('times_today').innerText = timesToday ? `${timesToday} times` : '0 times';
+
               const lastTime = this.list[this.list.length - 1];
               if (lastTime) {
                   const date = new Date(lastTime.timestamp);
@@ -187,6 +191,10 @@
               timer.update();
               this.render();
           },
+          countToday() {
+              const today = new Date().setHours(0, 0, 0, 0);
+              return this.list.filter((item) => item.timestamp > today).length;
+          },
           export() {
               const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.list));
               const downloadAnchorNode = document.createElement('a');
@@ -207,6 +215,7 @@
 <div class="container">
   <span class="last-time-caption">Last smoke was in <span id="last_time"></span>, <span id="time_ago"></span> ago</span>
   <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span> times</button>
+  <span class="last-time-caption"><span id="times_today"></span> today</span>
 </div>
 <script type="text/javascript">
     counter.render();
