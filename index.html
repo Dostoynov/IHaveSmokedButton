@@ -67,11 +67,11 @@
       height: 100px;
       border-radius: 24px;
       background-color: red;
-      color: white;
+      color: #2d4048;
+      outline: 1px solid #2d4048;
       font-size: 20px;
       font-weight: bold;
       border: none;
-      outline: none;
       cursor: pointer;
       transition: all 0.1s ease-in-out;
     }
@@ -82,14 +82,26 @@
       align-items: center;
       gap: 16px;
     }
+
+    .action-container {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .action-container select {
+      border: none;
+      margin-left: -4px;
+      background-color: transparent;
+      outline: none;
+    }
   </style>
   <script type="text/javascript">
       /**
        *    type Record = {
        *      timestamp: number,
-       *      type?: 'cigarette' | 'weed' | 'vape' | 'gum','
+       *      type?: 'cigarette' | 'weed' | 'vape' | 'gum'
        *    }
-       *
        * */
       const localStorageKey = 'smoke-click';
 
@@ -162,10 +174,19 @@
       };
 
       const counter = {
+          colors: {
+              cigarette: "#ff9999",
+              vape: '#9999ff',
+              weed: '#99ff99',
+              gum: '#ff99ff',
+          },
+
           list: JSON.parse(localStorage.getItem(localStorageKey)),
           render() {
               localStorage.setItem(localStorageKey, JSON.stringify(this.list));
-              document.querySelector('.counter').innerText = this.list.length;
+              const counter = document.querySelector('.counter');
+              counter.innerText = this.list.length;
+              counter.parentElement.style.backgroundColor = this.colors[this.list[this.list.length - 1]?.type || 'cigarette'];
 
               const timesToday = this.countToday();
               document.getElementById('times_today').innerText = timesToday ? `${timesToday} times` : '0 times';
@@ -179,9 +200,11 @@
               }
           },
           increment() {
+              const type = document.getElementById('type').value;
+
               this.list.push({
                   timestamp: Date.now(),
-                  type: 'cigarette',
+                  type,
               });
               timer.update();
               this.render();
@@ -214,12 +237,24 @@
 </div>
 <div class="container">
   <span class="last-time-caption">Last smoke was in <span id="last_time"></span>, <span id="time_ago"></span> ago</span>
-  <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span> times</button>
+  <div class="action-container">
+    <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span> times</button>
+    <div>
+      <label for="type">Last is</label>
+      <select id="type">
+        <option value="cigarette">Cigarette</option>
+        <option value="gum">Gum</option>
+        <option value="vape">Vape</option>
+        <option value="weed">Weed</option>
+      </select>
+    </div>
+  </div>
   <span class="last-time-caption"><span id="times_today"></span> today</span>
 </div>
 <script type="text/javascript">
     counter.render();
     timer.update();
+    document.getElementById('type').value = counter.list[counter.list.length - 1]?.type || 'cigarette';
 </script>
 </body>
 </html>
