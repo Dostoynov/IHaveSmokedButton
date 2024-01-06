@@ -75,6 +75,7 @@
       cursor: pointer;
       transition: all 0.1s ease-in-out;
     }
+
     .container {
       display: flex;
       flex-direction: column;
@@ -238,7 +239,9 @@
 <div class="container">
   <span class="last-time-caption">Last smoke was in <span id="last_time"></span>, <span id="time_ago"></span> ago</span>
   <div class="action-container">
-    <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span> times</button>
+    <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span>
+      times
+    </button>
     <div>
       <label for="type">Last is</label>
       <select id="type">
