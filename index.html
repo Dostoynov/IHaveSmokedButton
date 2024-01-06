@@ -84,15 +84,8 @@
       gap: 16px;
     }
 
-    .action-container {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .action-container select {
+    #type {
       border: none;
-      margin-left: -4px;
       background-color: transparent;
       outline: none;
       color: inherit;
@@ -239,23 +232,21 @@
 <div class="sidebar">
   <button onclick="counter.undo()" class="button button__cancel">undo</button>
   <button onclick="counter.export()" class="button button__download">JSON</button>
+  <div>
+    <label for="type">Last is</label>
+    <select id="type">
+      <option value="cigarette">Cigarette</option>
+      <option value="gum">Gum</option>
+      <option value="vape">Vape</option>
+      <option value="weed">Weed</option>
+    </select>
+  </div>
 </div>
 <div class="container">
   <span class="last-time-caption">Last smoke was in <span id="last_time"></span>, <span id="time_ago"></span> ago</span>
-  <div class="action-container">
-    <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span>
-      times
-    </button>
-    <div>
-      <label for="type">Last is</label>
-      <select id="type">
-        <option value="cigarette">Cigarette</option>
-        <option value="gum">Gum</option>
-        <option value="vape">Vape</option>
-        <option value="weed">Weed</option>
-      </select>
-    </div>
-  </div>
+  <button class="button button__bigRed" onclick="counter.increment()">I have smoked <span class="counter">0</span>
+    times
+  </button>
   <span class="last-time-caption"><span id="times_today"></span> today</span>
 </div>
 <script type="text/javascript">
